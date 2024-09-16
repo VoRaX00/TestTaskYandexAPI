@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}TestTaskYandexAPI{% endblock title %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block content %}
+<section class="main-content">
+    <div class="container mt-5">
+        <form method="post" action="{% url 'app:view-files' %}">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="url" name="file_url" class="form-control" placeholder="Введите ссылку на файл" aria-label="File URL" required>
+                <button class="btn btn-success" type="submit">Просмотреть файлы</button>
+            </div>
+        </form>
+    
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Название файла</th>
+                    <th scope="col">Дата добавления</th>
+                    <th scope="col">Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.upload_date|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'app:download-file' file.id %}" class="btn btn-primary">Скачать</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Файлы отсутствуют</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock content %}
+
+{% block javascript %}
+
+{% endblock javascript %}
