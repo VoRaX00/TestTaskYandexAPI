@@ -3,7 +3,7 @@
 {% block title %}TestTaskYandexAPI{% endblock title %}
 
 {% block css %}
-
+    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-token-with-polyfills-latest.js"></script>
 {% endblock css %}
 
 {% block content %}
@@ -12,8 +12,8 @@
         <form method="post" action="{% url 'app:view-files' %}">
             {% csrf_token %}
             <div class="input-group mb-3">
-                <input type="url" name="file_url" class="form-control" placeholder="Введите ссылку на файл" aria-label="File URL" required>
-                <button class="btn btn-success" type="submit">Просмотреть файлы</button>
+                <input type="url" id="public_link" name="public_link" class="form-control" value={{ public_link }} placeholder="Введите публичную ссылку" aria-label="Public link" required>
+                <button class="btn btn-success" type="submit">Открыть</button>
             </div>
         </form>
     
@@ -22,7 +22,6 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Название файла</th>
-                    <th scope="col">Дата добавления</th>
                     <th scope="col">Действие</th>
                 </tr>
             </thead>
@@ -31,9 +30,12 @@
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ file.name }}</td>
-                    <td>{{ file.upload_date|date:"d.m.Y H:i" }}</td>
                     <td>
-                        <a href="{% url 'app:download-file' file.id %}" class="btn btn-primary">Скачать</a>
+                        {% if file.file_id %}
+                            <a href="{% url 'app:download-file' file.file_id %}?public_link={{ public_link }}" class="btn btn-primary">Скачать</a>
+                        {% else %}
+                            <button class="btn btn-secondary" disabled>Нет ссылки</button>
+                        {% endif %}
                     </td>
                 </tr>
                 {% empty %}
