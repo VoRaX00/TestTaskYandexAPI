@@ -13,7 +13,13 @@ async def get_files(public_link):
         async with session.get(url) as response:
             if response.status == 200:
                 data = await response.json()
-                if '_embedded' in data and 'items' in data['_embedded']:
+                if 'type' in data and data['type'] == 'file':
+                    files.append({
+                        'file_id': data.get('resource_id', ''),
+                        'name': data.get('name', ''),
+                        'download_url': data.get('file', ''),
+                    })
+                elif '_embedded' in data and 'items' in data['_embedded']:
                     files = data['_embedded']['items']
                     for file in files:
                         file['file_id'] = file.get('resource_id', '')
@@ -41,7 +47,9 @@ async def download_file_async(public_link, file_id):
                 data = await response.json()
                 file_info = None
 
-                if '_embedded' in data and 'items' in data['_embedded']:
+                if 'type' in data and data['type'] == 'file' and data.get('resource_id') == file_id:
+                    file_info = data
+                elif '_embedded' in data and 'items' in data['_embedded']:
                     for item in data['_embedded']['items']:
                         if item.get('resource_id') == file_id:
                             file_info = item

@@ -11,7 +11,7 @@
         <form method="post" action="{% url 'app:view-files' %}">
             {% csrf_token %}
             <div class="input-group mb-3">
-                <input type="url" id="public_link" name="public_link" class="form-control" value={{ public_link }} placeholder="Введите публичную ссылку" aria-label="Public link" required>
+                <input type="url" id="public_link" name="public_link" class="form-control" value="{{ public_link }}" placeholder="Введите публичную ссылку" aria-label="Public link" required>
                 <button class="btn btn-success" type="submit">Открыть</button>
             </div>
         </form>
