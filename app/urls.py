@@ -5,5 +5,5 @@ app_name = 'app'
 
 urlpatterns = [
     path('view-files', views.view_files, name='view-files'),
-    path('download-file/<str:file_id>/', views.download_file, name='download-file'),
+    path('download-files/<str:file_id>/', views.download_files, name='download-file'),
 ]
